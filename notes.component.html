@@ -1,0 +1,178 @@
+<div class="notes-header">
+  <app-header></app-header>
+
+  <div class="container MT30">
+    <div class="row MB20">
+      <div class="col-md-3 col-md-offset-9 col-sm-5 col-xs-6">
+        <button class="btn btn-block btn-green" data-toggle="modal" data-target="#addNoteModal"
+          (click)="newNoteInit()">{{ 'NOTE.NEWNOTE' | translate }} </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="row ">
+          <div class="col-md-3 col-sm-6" *ngFor="let note of notes; let i = index">
+            <div (click)="viewNote(note.id)" class="member-panel" data-toggle="modal" data-target="#showNoteModal">
+              <div class="container-fluid textclass">
+                <p class="noteoverflow"> 
+                  {{ note.note }}
+                </p>
+              </div>
+              <div class="mbname">
+                <!-- <div> Knowledge Pack 1</div> -->
+                <div class="M0 titleoverflow"> {{ note.title }} </div>
+                <!-- <a href="#" onclick="onDelClick(); return false;" data-toggle="modal" data-target="#deleteNoteModal"style="float: right;">
+                  <span> &#9249;; </span>
+                </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Notes Modal -->
+  <div class="modal fade" data-backdrop="static" data-keyboard="false" id="addNoteModal" tabindex="-1" role="dialog"
+    aria-labelledby="addNoteModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <form> 
+        <div class="modal-content">
+          <div class="modal-header">
+            <nav class="navbar navbar-light col-md-12 P0">
+              <!-- <Label id="Value"> New Note </Label> -->
+            </nav>
+          </div>
+          <div class="modal-body">
+            <div class="row ">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <!-- Form that gets user input -->
+                  <form name="itemForm" class="formstyle">
+                    <input type="text" autofocus="autofocus" id="newNoteinput" name="newNoteinput" (input)="onChangeTitle()" [(ngModel)]="newNote.title"
+                    placeholder="{{ 'NOTE.NOTESTITLE' | translate }}" class="form-control" required="required"/>
+                    <br>
+                    <textarea id="newNoteTxtArea" name="newNoteTxtArea" [(ngModel)]="newNote.note" 
+                      placeholder="Write here" class="form-control" rows=10></textarea>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-normal btn-black" data-dismiss="modal" id="cancel">{{ 'LINK.CANCEL' | translate }}</button>
+            <button type="submit" class="btn btn-normal btn-green" [disabled]="addDisable" (click)="onAddNoteClick()">{{ 'NOTE.ADDNOTE' | translate }}</button>
+          </div>
+        </div>
+      </form>  
+    </div>
+  </div>
+
+
+  <!-- Show Notes Modal -->
+  <div class="modal fade" data-backdrop="static" data-keyboard="false" id="showNoteModal" tabindex="-1" role="dialog"
+    aria-labelledby="showNoteModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <ng-container *ngIf="isViewNote; then viewMode; else editMode">
+        </ng-container>
+
+        <!-- 1. VIEW MODAL -->
+        <ng-template #viewMode>
+          <div class="modal-header">
+            <nav class="navbar navbar-light col-md-12 P0">
+              <!-- <Label id="Value"> View Note </Label> -->
+            </nav>
+          </div>
+          <div class="modal-body">
+            <div class="row ">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <!-- Form that gets user input -->
+                  <p>
+                    <strong> {{ newNote.title }} </strong> <br><br>
+                  </p>
+                  <p>
+                    {{ newNote.note }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-normal btn-danger ml-auto" id="delete" data-toggle="modal" data-target="#deleteNoteModal" (click)=onDeleteClick()>{{ 'LINK.DELETE' | translate }}</button>
+            <button class="btn btn-normal btn-black" data-dismiss="modal" id="cancel">{{ 'LINK.CLOSE' | translate }}</button>
+            <button class="btn btn-normal btn-green" (click)=onEditClick()>{{ 'LINK.EDIT' | translate }}</button>
+          </div>
+        </ng-template>
+
+        <!-- 2. EDIT MODAL -->
+        <ng-template #editMode>
+          <div class="modal-header">
+            <nav class="navbar navbar-light col-md-12 P0">
+              <!-- <Label id="Value"> View Note </Label> -->
+            </nav>
+          </div>
+          <div class="modal-body">
+            <div class="row ">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <!-- Form that gets user input -->
+                  <form name="itemForm">
+
+                    <input id="notes-edit-title" name="notes-edit-title" [(ngModel)]='editNote.title' required value=""
+                      minlength="1" placeholder="{{ 'NOTE.NOTESTITLE' | translate }}"
+                      class="form-control">
+                    <br>
+                    <textarea autofocus id="notes-edit-content" name="notes-edit-content" [(ngModel)]="editNote.note"
+                     placeholder="{{ 'NOTE.NOTESCONTENT' | translate }}"
+                      class="form-control show-notes-content" rows=10> </textarea>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-normal btn-black" data-dismiss="modal" id="cancel">{{'LINK.CANCEL' | translate }}</button>
+            <button class="btn btn-normal btn-green" (click)="onUpdateClick()">{{'LINK.UPDATE' | translate}}</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete Notes Modal -->
+  <div class="modal fade" data-backdrop="static" data-keyboard="false" id="deleteNoteModal" tabindex="-1" role="dialog"
+    aria-labelledby="deleteNoteModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <form> 
+        <div class="modal-content">
+          <div class="modal-header">
+            <nav class="navbar navbar-light col-md-12 P0">
+              <!-- <Label id="Value"> New Note </Label> -->
+            </nav>
+          </div>
+          <div class="modal-body">
+            <div class="row ">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <!-- Form that gets user input -->
+                  <form name="itemForm" class="formstyle">
+                    <h5>{{'MESSAGES.CONFIRMDELETENOTE' | translate}}</h5> <br>
+                    {{ newNote.title }}
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-normal btn-green" data-dismiss="modal" id="cancel">{{ 'LINK.NO' | translate }}</button>
+            <button type="submit" class="btn btn-normal btn-danger" (click)="onDeleteNoteClick(newNote.id)">{{ 'LINK.YES' | translate }}</button>
+          </div>
+        </div>
+      </form>  
+    </div>
+  </div>
+</div>
