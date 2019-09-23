@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { $ } from 'jquery';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { BreadcrumbsService } from '../../../helpers/services/core/breadcrumbs.service';
-import { CI_BOOST } from '../../../app.constants';
+import { CI_B } from '../../../app.constants';
 declare var $: any;
 import { NotesService } from '../../../helpers/services/user/notes.service';
 import { Router } from '@angular/router';
@@ -40,10 +40,10 @@ export class NotesComponent implements OnInit{
     if(localStorage.getItem('currentView') !== undefined) {
       const view = localStorage.getItem('currentView');
         if(view == 'adminView') {
-          this.val = CI_BOOST.ROUTERLINKS.ADMIN + '/' + CI_BOOST.ROUTERLINKS.ADMIN_DASHBOARD + '/' + CI_BOOST.ROUTERLINKS.ADMIN_KNOWLEDGE_PACK;
+          this.val = CI_B.ROUTERLINKS.ADMIN + '/' + CI_B.ROUTERLINKS.ADMIN_DASHBOARD + '/' + CI_B.ROUTERLINKS.ADMIN_KNOWLEDGE_PACK;
         }
         else if(view == 'userView') {
-          this.val = '/' + CI_BOOST.ROUTERLINKS.USER.ROUTE.Home;
+          this.val = '/' + CI_B.ROUTERLINKS.USER.ROUTE.Home;
         }
     }
 
